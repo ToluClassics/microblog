@@ -1,4 +1,5 @@
 import logging
+import os
 from logging.handlers import SMTPHandler, RotatingFileHandler
 from flask import Flask
 from config import Config
@@ -30,8 +31,10 @@ if not app.debug and app.config['MAIL_SERVER']:
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
 
+        #create a log directory if it doesnt exist
         if not os.path.exists('logs'):
             os.mkdir('logs')
+        #keep the last ten log files with a size of 10kb
         file_handler = RotatingFileHandler('logs/microblog.log', maxBytes=10240,
                                         backupCount=10)
         file_handler.setFormatter(logging.Formatter(
